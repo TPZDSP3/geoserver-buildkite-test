@@ -4,7 +4,7 @@ ARG JAVA_HOME=/usr/local/openjdk-11
 FROM tomcat:$IMAGE_VERSION
 
 LABEL maintainer="Tim Sutton<tim@linfiniti.com>"
-ARG GS_VERSION=2.21.0
+ARG GS_VERSION=2.18.0
 ARG WAR_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip
 ARG STABLE_PLUGIN_BASE_URL=https://sonik.dl.sourceforge.net
 ARG DOWNLOAD_ALL_STABLE_EXTENSIONS=1
@@ -75,5 +75,5 @@ USER ${GEOSERVER_UID}
 RUN echo 'figlet -t "Kartoza Docker GeoServer"' >> ~/.bashrc
 VOLUME ["${GEOSERVER_DATA_DIR}", "${CERT_DIR}", "${FOOTPRINTS_DATA_DIR}", "${FONTS_DIR}"]
 WORKDIR ${GEOSERVER_HOME}
-
+COPY server.xml /usr/local/tomcat/conf/server.xml
 CMD ["/bin/bash", "/scripts/entrypoint.sh"]
