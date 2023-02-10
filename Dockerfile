@@ -22,7 +22,7 @@ RUN set -eux; \
         locales gnupg2 wget ca-certificates rpl pwgen software-properties-common  iputils-ping \
         apt-transport-https curl gettext fonts-cantarell lmodern ttf-aenigma \
         ttf-bitstream-vera ttf-sjfonts tv-fonts  libapr1-dev libssl-dev  \
-        wget zip unzip curl xsltproc certbot  cabextract gettext postgresql-client figlet; \
+        wget zip unzip curl xsltproc certbot  cabextract gettext postgresql-client figlet vim; \
     # Install gdal3 - bullseye doesn't build libgdal-java anymore so we can't upgrade
     curl https://deb.meteo.guru/velivole-keyring.asc |  apt-key add - \
     && echo "deb https://deb.meteo.guru/debian buster main" > /etc/apt/sources.list.d/meteo.guru.list \
@@ -52,7 +52,6 @@ WORKDIR /scripts
 ADD resources /tmp/resources
 ADD build_data /build_data
 ADD scripts /scripts
-
 RUN groupadd -r ${GROUP_NAME} -g ${GEOSERVER_GID} && \
     useradd -l -m -d /home/${USER}/ -u ${GEOSERVER_UID} --gid ${GEOSERVER_GID} -s /bin/bash -G ${GROUP_NAME} ${USER}; \
     mkdir -p  ${GEOSERVER_DATA_DIR} ${CERT_DIR} ${FOOTPRINTS_DATA_DIR} ${FONTS_DIR} \
@@ -75,5 +74,4 @@ USER ${GEOSERVER_UID}
 RUN echo 'figlet -t "Kartoza Docker GeoServer"' >> ~/.bashrc
 VOLUME ["${GEOSERVER_DATA_DIR}", "${CERT_DIR}", "${FOOTPRINTS_DATA_DIR}", "${FONTS_DIR}"]
 WORKDIR ${GEOSERVER_HOME}
-COPY server.xml /usr/local/tomcat/conf/server.xml
 CMD ["/bin/bash", "/scripts/entrypoint.sh"]
